@@ -3,29 +3,32 @@
 <head>
     <title>Sinema Odası</title>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
-    <style>
-        body { margin: 0; background: #000; display: flex; flex-direction: column; height: 100vh; }
-        #player { width: 100%; height: 90vh; }
-        .controls { color: white; padding: 10px; text-align: center; }
-    </style>
+    <style>body { margin: 0; background: #000; overflow: hidden; } #player { width: 100vw; height: 100vh; }</style>
 </head>
 <body>
     <div id="player"></div>
-    <div class="controls">Arkadaşlarınla senkronize izliyorsun!</div>
     <script>
-        // Buraya YouTube Iframe API gelecek
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        const videoId = new URLSearchParams(window.location.search).get('v') || 'dQw4w9WgXcQ';
+        let player;
 
-        var player;
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('player', {
-                videoId: new URLSearchParams(window.location.search).get('v'),
-                playerVars: { 'autoplay': 1, 'modestbranding': 1, 'rel': 0 }
+                videoId: videoId,
+                playerVars: { 'autoplay': 1, 'controls': 1, 'modestbranding': 1, 'rel': 0 },
+                events: { 'onStateChange': onPlayerStateChange }
             });
         }
+
+        function onPlayerStateChange(event) {
+            // 1: Başlatıldı, 2: Durduruldu
+            if (event.data == 1) { console.log("Video başlatıldı"); }
+            else if (event.data == 2) { console.log("Video durduruldu"); }
+        }
+
+        // YouTube API'sini yükle
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        document.body.appendChild(tag);
     </script>
 </body>
 </html>
