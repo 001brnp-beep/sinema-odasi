@@ -2,31 +2,25 @@
 <html>
 <head>
     <title>Sinema Odası</title>
-    <script src="https://www.youtube.com/iframe_api"></script>
     <style>
         body { margin: 0; background: #000; overflow: hidden; }
-        #player { width: 100vw; height: 100vh; }
+        iframe { width: 100vw; height: 100vh; border: none; }
     </style>
 </head>
 <body>
     <div id="player"></div>
     <script>
         const videoId = new URLSearchParams(window.location.search).get('v') || 'dQw4w9WgXcQ';
-        let player;
-
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                videoId: videoId,
-                playerVars: { 
-                    'autoplay': 1, 
-                    'modestbranding': 1, 
-                    'rel': 0 
-                },
-                events: {
-                    'onReady': (e) => e.target.mute() // Reklam sesini otomatik kısar
-                }
-            });
-        }
+        const playerDiv = document.getElementById('player');
+        
+        // YouTube'u doğrudan iframe ile çağıralım, bu Discord'un içine gömmeyi daha çok sever
+        playerDiv.innerHTML = `
+            <iframe 
+                src="https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&rel=0&modestbranding=1" 
+                allow="autoplay; encrypted-media" 
+                allowfullscreen>
+            </iframe>
+        `;
     </script>
 </body>
 </html>
