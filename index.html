@@ -2,8 +2,11 @@
 <html>
 <head>
     <title>Sinema Odası</title>
-    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
-    <style>body { margin: 0; background: #000; overflow: hidden; } #player { width: 100vw; height: 100vh; }</style>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; }
+        #player { width: 100vw; height: 100vh; }
+    </style>
 </head>
 <body>
     <div id="player"></div>
@@ -14,21 +17,16 @@
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('player', {
                 videoId: videoId,
-                playerVars: { 'autoplay': 1, 'controls': 1, 'modestbranding': 1, 'rel': 0 },
-                events: { 'onStateChange': onPlayerStateChange }
+                playerVars: { 
+                    'autoplay': 1, 
+                    'modestbranding': 1, 
+                    'rel': 0 
+                },
+                events: {
+                    'onReady': (e) => e.target.mute() // Reklam sesini otomatik kısar
+                }
             });
         }
-
-        function onPlayerStateChange(event) {
-            // 1: Başlatıldı, 2: Durduruldu
-            if (event.data == 1) { console.log("Video başlatıldı"); }
-            else if (event.data == 2) { console.log("Video durduruldu"); }
-        }
-
-        // YouTube API'sini yükle
-        const tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        document.body.appendChild(tag);
     </script>
 </body>
 </html>
